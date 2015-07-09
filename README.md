@@ -1,4 +1,4 @@
-# Landsat 8 Archiving for pilot World Heritage sites
+# Landsat 8 archiving for pilot World Heritage sites
 This study aims to improve the understanding how remote sensing based monitoring could be undertaken in pratice for natural World Heritage sites, and becomes operationalised as a routine for proactive monitoring.
 
 # Technology and libraries used
