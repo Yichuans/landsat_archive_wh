@@ -1,0 +1,4 @@
+2015-07-08 17:03:52,781 Registered VCS backend: git
+2015-07-08 17:03:53,063 Registered VCS backend: hg
+2015-07-08 17:03:53,199 Registered VCS backend: svn
+2015-07-08 17:03:53,201 Registered VCS backend: bzr
