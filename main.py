@@ -165,7 +165,7 @@ def fetch_record_by_wrs(wrspath, wrsrow, df):
     return df.ix[val]
 
 def fetch_record_by_lid(lid, df):
-    val = df['entityId']== lid
+    val = df['entityId'] == lid
     return df.ix[val]
 
 
@@ -191,6 +191,7 @@ def fetch_disjoint(df_remote, df_local):
 
 def filter_cloud(df):
     # must be lower than cloud threshold
+
     val = df['cloudCover'] <= CLOUD_COVER_THRES
     return df.ix[val]
 
@@ -217,7 +218,12 @@ def _download():
     l8 = landsat_scene(lid)
     l8.save('a_test_wh_site')
 
-def _main():
+
+### ================MAIN===============
+def run_a_wh_site(wdpaid = 555577555, workspace = r'E:\Yichuan\Landsat_archiving'):
+    # workspace
+    os.chdir(workspace)
+
     # remote index and save as pandas dataframe
     df_remote = find_record_s3landsat_index(GZ_INDEX)
 
@@ -234,7 +240,6 @@ def _main():
     # get wh wrs look-up table
     wh_wrs = get_wh_wrs_mk2()
     # okavango delta
-    wdpaid = 555577555
     site_name = wh_wrs[str(wdpaid)][0]
     wrs_list = wh_wrs[str(wdpaid)][1]
     print('Processing %s'%site_name)
@@ -251,11 +256,11 @@ def _main():
         # find what's in remote but not local
         df_to_download = fetch_disjoint(df_remote_sub, df_local_sub)
         if df_to_download.size > 0:
-            print('Found new images available for path %s and row %s: '%(wrspath, wrsrow)\
+            print('Found images available for path %s and row %s: '%(wrspath, wrsrow)\
              + str(df_to_download.size))
 
         else:
-            print('No new images found')
+            print('No images found')
             continue
 
         # check cloud cover
@@ -266,7 +271,7 @@ def _main():
             # download
             for lid in list(df_to_download['entityId']):
                 landsat8 = landsat_scene(lid)
-                landsat8.save(str(wdpaid))
+                landsat8.save(str(wdpaid), True)
 
                 # make sure local index table is updated
                 df_local = pd.concat([df_local, fetch_record_by_lid(lid, df_to_download)])
@@ -279,4 +284,7 @@ def _main():
         else:
             print('Images do not meet cloud threshold %s'%(CLOUD_COVER_THRES,))
 
+
+if __name__ == '__main__':
+    run_a_wh_site()
 
